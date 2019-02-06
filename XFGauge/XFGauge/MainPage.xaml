@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:XFGauge"
+             xmlns:controls="clr-namespace:XFGauge.Controls"
+             x:Class="XFGauge.MainPage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Slider x:Name="slider"
+                Grid.Row="0"
+                Maximum="100"
+                Minimum="0"
+                Value="5"
+                Margin="20, 0" />
+
+        <Label Grid.Row="1"
+               Text="{Binding Source={x:Reference slider},
+                              Path=Value,
+                              StringFormat=' Temperature {0:F1} degrees'}"
+               HorizontalTextAlignment="Center" />
+
+        <controls:Gauge Grid.Row="2" x:Name="GaugeControl" WidthRequest="700" HeightRequest="700" 
+                        VerticalOptions="FillAndExpand"
+                        HighlightRangeStartValue="0"
+                        HighlightRangeEndValue="100"
+                        RangeIsVisible="True"
+                        Value="{Binding Source={x:Reference slider}, Path=Value}" 
+                        UnitsText="kh" />
+    </Grid>
+
+</ContentPage>
