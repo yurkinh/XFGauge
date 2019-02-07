@@ -42,17 +42,6 @@ namespace XFGauge.Controls
             set { SetValue(EndValueProperty, value); }
         }
 
-        // Properties for the Range Display
-
-        public static readonly BindableProperty RangeIsVisibleProperty =
-            BindableProperty.Create("RangeIsVisible", typeof(bool), typeof(Gauge), true);
-
-        public bool RangeIsVisible
-        {
-            get { return (bool)GetValue(RangeIsVisibleProperty); }
-            set { SetValue(RangeIsVisibleProperty, value); }
-        }
-
         public static readonly BindableProperty HighlightRangeStartValueProperty =
             BindableProperty.Create("HighlightRangeStartValue", typeof(float), typeof(Gauge), 70.0f);
 
@@ -99,6 +88,15 @@ namespace XFGauge.Controls
             set { SetValue(RangeColorProperty, value); }
         }
 
+        public static readonly BindableProperty NeedleColorProperty =
+           BindableProperty.Create("NeedleColor", typeof(Color), typeof(Gauge), Color.FromRgb(252, 18, 30));
+
+        public Color NeedleColor
+        {
+            get { return (Color)GetValue(NeedleColorProperty); }
+            set { SetValue(NeedleColorProperty, value); }
+        }
+
         // Properties for the Units
 
         public static readonly BindableProperty UnitsTextProperty =
@@ -108,6 +106,15 @@ namespace XFGauge.Controls
         {
             get { return (string)GetValue(UnitsTextProperty); }
             set { SetValue(UnitsTextProperty, value); }
+        }
+
+        public static readonly BindableProperty ValueFontSizeProperty =
+           BindableProperty.Create("ValueFontSize", typeof(float), typeof(Gauge), 33f);
+
+        public float ValueFontSize
+        {
+            get { return (float)GetValue(ValueFontSizeProperty); }
+            set { SetValue(ValueFontSizeProperty, value); }
         }
 
         protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
@@ -156,19 +163,18 @@ namespace XFGauge.Controls
 
 
             // Draw the range of values
-            if (RangeIsVisible)
-            {
-                var rangeStartAngle = AmountToAngle(HighlightRangeStartValue);
-                var rangeEndAngle = AmountToAngle(HighlightRangeEndValue);
-                var angleDistance = rangeEndAngle - rangeStartAngle;
 
-                using (SKPath path = new SKPath())
-                {
-                    path.AddArc(rect, rangeStartAngle, angleDistance);
-                    path.LineTo(center);
-                    canvas.DrawPath(path, HighlightRangePaint);
-                }
+            var rangeStartAngle = AmountToAngle(HighlightRangeStartValue);
+            var rangeEndAngle = AmountToAngle(HighlightRangeEndValue);
+            var angleDistance = rangeEndAngle - rangeStartAngle;
+
+            using (SKPath path = new SKPath())
+            {
+                path.AddArc(rect, rangeStartAngle, angleDistance);
+                path.LineTo(center);
+                canvas.DrawPath(path, HighlightRangePaint);
             }
+
             // Draw the main gauge line/arc
             SKPaint GaugeMainLinePaintP1 = new SKPaint
             {
@@ -280,7 +286,7 @@ namespace XFGauge.Controls
             // Draw the Value on the display
             var valueText = Value.ToString("F1");
             float valueTextWidth = textPaint.MeasureText(valueText);
-            textPaint.TextSize = 35f;
+            textPaint.TextSize = ValueFontSize;
 
             textPaint.MeasureText(valueText, ref textBounds);
 
@@ -309,7 +315,7 @@ namespace XFGauge.Controls
             SKPaint paint = new SKPaint
             {
                 IsAntialias = true,
-                Color = new SKColor(252, 18, 30)
+                Color = NeedleColor.ToSKColor()
             };
 
             SKPath needleRightPath = new SKPath();
@@ -339,18 +345,17 @@ namespace XFGauge.Controls
 
             // Determine when to change. Basically on any of the properties that we've added that affect
             // the visualization, including the size of the control, we'll repaint
-            if (propertyName == HighlightRangeEndValueProperty.PropertyName ||
-                propertyName == HighlightRangeStartValueProperty.PropertyName ||
-                propertyName == ValueProperty.PropertyName ||
-                propertyName == WidthProperty.PropertyName ||
-                propertyName == HeightProperty.PropertyName ||
-                propertyName == StartValueProperty.PropertyName ||
-                propertyName == EndValueProperty.PropertyName ||
-                propertyName == RangeIsVisibleProperty.PropertyName ||
-                propertyName == GaugeLineColorProperty.PropertyName ||
-                propertyName == ValueColorProperty.PropertyName ||
-                propertyName == RangeColorProperty.PropertyName ||
-                propertyName == UnitsTextProperty.PropertyName)
+            if (propertyName == HighlightRangeEndValueProperty.PropertyName
+                || propertyName == HighlightRangeStartValueProperty.PropertyName
+                || propertyName == ValueProperty.PropertyName
+                || propertyName == WidthProperty.PropertyName
+                || propertyName == HeightProperty.PropertyName
+                || propertyName == StartValueProperty.PropertyName
+                || propertyName == EndValueProperty.PropertyName
+                || propertyName == GaugeLineColorProperty.PropertyName
+                || propertyName == ValueColorProperty.PropertyName
+                || propertyName == RangeColorProperty.PropertyName
+                || propertyName == UnitsTextProperty.PropertyName)
             {
                 InvalidateSurface();
             }

@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:XFGauge"
              xmlns:controls="clr-namespace:XFGauge.Controls"
              x:Class="XFGauge.MainPage">
 
@@ -25,13 +24,15 @@
                               StringFormat=' Temperature {0:F1} degrees'}"
                HorizontalTextAlignment="Center" />
 
-        <controls:Gauge Grid.Row="2" x:Name="GaugeControl" WidthRequest="700" HeightRequest="700" 
+        <controls:Gauge Grid.Row="2"
+                        x:Name="GaugeControl" WidthRequest="700" HeightRequest="700" 
                         VerticalOptions="FillAndExpand"
                         HighlightRangeStartValue="0"
                         HighlightRangeEndValue="100"
-                        RangeIsVisible="True"
+                        NeedleColor="Brown"
+                        ValueFontSize="33"
                         Value="{Binding Source={x:Reference slider}, Path=Value}" 
-                        UnitsText="kh" />
+                        UnitsText="t" />
     </Grid>
 
 </ContentPage>
