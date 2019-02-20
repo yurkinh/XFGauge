@@ -284,7 +284,7 @@ namespace XFGauge.Controls
             canvas.DrawText(UnitsText, xText, yText, textPaint);
 
             // Draw the Value on the display
-            var valueText = Value.ToString("F1");
+            var valueText = Value.ToString("F0"); //You can set F1 or F2 if you need float values
             float valueTextWidth = textPaint.MeasureText(valueText);
             textPaint.TextSize = ValueFontSize;
 
@@ -359,6 +359,6 @@ namespace XFGauge.Controls
             {
                 InvalidateSurface();
             }
-        }
+        }        
     }
 }
