@@ -13,7 +13,7 @@ namespace XFGauge.Controls
             WidthRequest = 500;
             HeightRequest = 500;
         }
-
+        #region Properties
         // Properties for the Values
         public static readonly BindableProperty ValueProperty =
             BindableProperty.Create("Value", typeof(float), typeof(Gauge), 0.0f);
@@ -116,6 +116,7 @@ namespace XFGauge.Controls
             get { return (float)GetValue(ValueFontSizeProperty); }
             set { SetValue(ValueFontSizeProperty, value); }
         }
+        #endregion
 
         protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
         {
